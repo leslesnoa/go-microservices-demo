@@ -10,12 +10,13 @@ import (
 func Start() {
 
 	// mux := http.NewServeMux()
-	mux := mux.NewRouter()
+	router := mux.NewRouter()
 
 	// define routes
-	mux.HandleFunc("/greet", greet)
-	mux.HandleFunc("/customers", getAllCustomers)
+	router.HandleFunc("/greet", greet)
+	router.HandleFunc("/customers", getAllCustomers)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}", getCustomer)
 
 	// starting server
-	log.Fatal(http.ListenAndServe("localhost:8000", mux))
+	log.Fatal(http.ListenAndServe("localhost:8000", router))
 }

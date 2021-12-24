@@ -9,22 +9,23 @@ type Customer struct {
 	Status      string
 }
 
-type ICustomerRepository interface {
+type CustomerRepository interface {
 	FindAll() ([]Customer, error)
 }
 
-type CustomerRepositoryStub struct {
-	customers []Customer
-}
+/* cutomerRepositoryStubへ定義を移動 */
+// type CustomerRepositoryStub struct {
+// 	customers []Customer
+// }
 
-func (s CustomerRepositoryStub) FindAll() ([]Customer, error) {
-	return s.customers, nil
-}
+// func (s CustomerRepositoryStub) FindAll() ([]Customer, error) {
+// 	return s.customers, nil
+// }
 
-func NewCustomerRepositoryStub() CustomerRepositoryStub {
-	customers := []Customer{
-		{Id: "1001", Name: "Ashish", City: "New Delhi", Zipcode: "110075", DateofBirth: "2000-01-01", Status: "1"},
-		{Id: "1002", Name: "Rob", City: "New Delhi", Zipcode: "110075", DateofBirth: "2000-01-01", Status: "1"},
-	}
-	return CustomerRepositoryStub{customers}
-}
+// func NewCustomerRepositoryStub() CustomerRepositoryStub {
+// 	customers := []Customer{
+// 		{Id: "1001", Name: "Ashish", City: "New Delhi", Zipcode: "110075", DateofBirth: "2000-01-01", Status: "1"},
+// 		{Id: "1002", Name: "Rob", City: "New Delhi", Zipcode: "110075", DateofBirth: "2000-01-01", Status: "1"},
+// 	}
+// 	return CustomerRepositoryStub{customers}
+// }

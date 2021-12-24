@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/leslesnoa/go-microservices-demo/service"
 )
 
 type Customer struct {
@@ -14,15 +15,17 @@ type Customer struct {
 	Zipcod string `json:"zip_code"`
 }
 
-func greet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello World")
+type CustomerHandlers struct {
+	service service.CustomerService
 }
 
-func getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{
-		{Name: "Ashish", City: "New Delhi", Zipcod: "110075"},
-		{Name: "Rob", City: "New Delhi", Zipcod: "110075"},
-	}
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+	// customers := []Customer{
+	// 	{Name: "Ashish", City: "New Delhi", Zipcod: "110075"},
+	// 	{Name: "Rob", City: "New Delhi", Zipcod: "110075"},
+	// }
+
+	customers, _ := ch.service.GetAllCustomer()
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(customers)
 }

@@ -14,20 +14,27 @@ import (
 // 	City   string `json:"city"`
 // 	Zipcod string `json:"zip_code"`
 // }
+/*
+*Try*
+APIはJSON応答のみを返す必要があります
+サーバーから予期しないエラーが発生した場合、APIはHTTPステータスコード500を返す必要があります
+サーバーから顧客を正常に取得した場合、APIはHTTPステータスコード200を返す必要があります
+*/
 
 type CustomerHandlers struct {
 	service service.CustomerService
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	// customers := []Customer{
-	// 	{Name: "Ashish", City: "New Delhi", Zipcod: "110075"},
-	// 	{Name: "Rob", City: "New Delhi", Zipcod: "110075"},
-	// }
 
-	customers, _ := ch.service.GetAllCustomer()
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(customers)
+	status := r.URL.Query().Get("status")
+
+	customers, err := ch.service.GetAllCustomer(status)
+	if err != nil {
+		writeResponse(w, err.Code, err.AsMessage())
+	} else {
+		writeResponse(w, http.StatusOK, customers)
+	}
 }
 
 func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {

@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/leslesnoa/go-microservices-demo/errs"
+
 type Customer struct {
 	Id          string
 	Name        string
@@ -11,6 +13,7 @@ type Customer struct {
 
 type CustomerRepository interface {
 	FindAll() ([]Customer, error)
+	ById(string) (*Customer, *errs.AppError)
 }
 
 /* cutomerRepositoryStubへ定義を移動 */

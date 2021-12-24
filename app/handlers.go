@@ -30,10 +30,22 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 	json.NewEncoder(w).Encode(customers)
 }
 
-func getCustomer(w http.ResponseWriter, r *http.Request) {
+func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
 	// get path parameter
 	vars := mux.Vars(r)
-	fmt.Fprint(w, vars["customer_id"])
+	// fmt.Fprint(w, vars["customer_id"])
+	id := vars["customer_id"]
+
+	customer, err := ch.service.GetCustomer(id)
+	w.Header().Add("Content-Type", "application/json")
+	if err != nil {
+		// w.WriteHeader(http.StatusNotFound)
+		// fmt.Fprintf(w, err.Error())
+		w.WriteHeader(err.Code)
+		fmt.Fprintf(w, err.Message)
+	} else {
+		json.NewEncoder(w).Encode(customer)
+	}
 }
 
 func createCustomer(w http.ResponseWriter, r *http.Request) {

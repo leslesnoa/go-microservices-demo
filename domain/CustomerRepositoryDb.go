@@ -6,6 +6,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/leslesnoa/go-microservices-demo/errs"
 )
 
 type CustomerRepositoryDb struct {
@@ -31,6 +32,24 @@ func (d CustomerRepositoryDb) FindAll() ([]Customer, error) {
 		customers = append(customers, c)
 	}
 	return customers, nil
+}
+
+func (d CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
+	customerSql := "select customer_id, name, city, zipcode, date_of_birth, status from customers where customer_id=?;"
+
+	row := d.client.QueryRow(customerSql, id)
+	var c Customer
+	if err := row.Scan(&c.Id, &c.Name, &c.City, &c.Zipcode, &c.DateofBirth, &c.Status); err != nil {
+		if err == sql.ErrNoRows {
+			// return nil, errors.New("Customer not Found")
+			return nil, errs.NewNotFoundError("Customer not Found")
+		} else {
+			log.Println("Error while scanning custokmer " + err.Error())
+			// return nil, errors.New("Unexpected database error")
+			return nil, errs.NewUnexpectedError("Unexpected database error")
+		}
+	}
+	return &c, nil
 }
 
 func NewCustomerRepositoryDb() CustomerRepositoryDb {

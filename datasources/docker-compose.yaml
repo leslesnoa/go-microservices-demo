@@ -1,20 +1,17 @@
-version: '3.8'
-
+version: '3'
 services:
-
-  db:
-    image: mysql:8.0.27
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: banking
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
-      TZ: 'Asia/Tokyo'
-    volumes:
-      - ./mysql/data:/var/lib/mysql
-      - ./mysql/my.conf:/etc/mysql/conf.d/my.cnf
-      - ./mysql/sql:/docker-entrypoint-initdb.d
+  mysql:
+    image: mysql:5.6.27
     ports:
-      - "3306:3306"
-    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d  
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: codecamp
+      TZ: Asia/Kolkata
+
+volumes:
+  mysqldata:
+    driver: local
